@@ -1,0 +1,261 @@
+
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bandwidth Management System</title>
+    <link rel="stylesheet" href="{% static 'dashboard/style.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Bandwidth Management System</h1>
+        <p>Workplace Network Monitoring and Management</p>
+    </header>
+
+    <main>
+        <h2>Dashboard Overview</h2>
+        
+<div class="stats-grid">    
+<section class="stat-card">
+    <p>Total Download</p>
+    <h2>{{ total_download|floatformat:2 }} MB</h2>
+</section>
+
+<section class="stat-card">
+    <p>Total Upload</p>
+    <h2>{{ total_upload|floatformat:2 }} MB</h2>
+</section>
+
+<section class="stat-card">
+    <p>Total Data Usage</p>
+    <h2>{{ total_usage|floatformat:2 }} MB</h2>
+</section>
+
+    <section class="stat-card">
+        <p>Total Devices</p>
+        <h2>{{ total_devices }}</h2>
+    </section>
+
+    <section class="stat-card">
+        <p>Connected Devices</p>
+        <h2>{{ connected_devices }}</h2>
+    </section>
+
+    <section class="stat-card">
+        <p>Disconnected Devices</p>
+        <h2>{{ disconnected_devices }}</h2>
+    </section>
+</div>
+<section class="card chart-card">
+    <h3>Bandwidth Usage Overview</h3>
+    <canvas id="bandwidthChart"></canvas>
+</section>
+
+        <div class="dashboard-grid">
+            
+<section class="card device-table-card">
+    <h3>Registered Network Devices</h3>
+    
+<form method="get" class="device-filters">
+    <div>
+        <label for="department">Department</label>
+        <select name="department" id="department">
+            <option value="">All departments</option>
+            {% for dept in departments %}
+                <option value="{{ dept }}"
+                    {% if selected_department == dept %}selected{% endif %}>
+                    {{ dept }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div>
+        <label for="status">Connection status</label>
+        <select name="status" id="status">
+            <option value="">All statuses</option>
+            <option value="connected"
+                {% if selected_status == "connected" %}selected{% endif %}>
+                Connected
+            </option>
+            <option value="disconnected"
+                {% if selected_status == "disconnected" %}selected{% endif %}>
+                Disconnected
+            </option>
+        </select>
+    </div>
+
+    <button type="submit">Apply Filters</button>
+    <a href="/">Clear Filters</a>
+</form>
+
+    <div class="table-container">
+        <table class="device-table">
+            <thead>
+                <tr>
+                    <th>Device Name</th>
+                    <th>IP Address</th>
+                    <th>Department</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for device in devices %}
+                <tr>
+                    <td>{{ device.device_name }}</td>
+                    <td>{{ device.ip_address }}</td>
+                    <td>{{ device.department }}</td>
+                    <td>
+                        {% if device.is_connected %}
+                            <span class="status connected">Connected</span>
+                        {% else %}
+                            <span class="status disconnected">Disconnected</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4">No devices registered yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section class="card device-table-card">
+    <h3>Bandwidth Usage by Device</h3>
+
+    <div class="table-container">
+        <table class="device-table">
+            <thead>
+                <tr>
+                    <th>Device</th>
+                    <th>Download (MB)</th>
+                    <th>Upload (MB)</th>
+                    <th>Total Usage (MB)</th>
+                    <th>Recorded At</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for record in device_usage %}
+                <tr>
+                    <td>{{ record.device.device_name }}</td>
+                    <td>{{ record.download_mb|floatformat:2 }}</td>
+                    <td>{{ record.upload_mb|floatformat:2 }}</td>
+                    <td>{{ record.download_mb|add:record.upload_mb|floatformat:2 }}</td>
+                    <td>{{ record.recorded_at|date:"d M Y, H:i" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5">No bandwidth records available.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section class="card report-card">
+    <h3>Bandwidth Usage Reports</h3>
+    <p>Select a date range to review recorded network usage.</p>
+
+    <form method="get" class="report-filters">
+        <div>
+            <label for="start_date">Start Date</label>
+            <input
+                type="date"
+                id="start_date"
+                name="start_date"
+                value="{{ start_date }}"
+            >
+        </div>
+
+        <div>
+            <label for="end_date">End Date</label>
+            <input
+                type="date"
+                id="end_date"
+                name="end_date"
+                value="{{ end_date }}"
+            >
+        </div>
+
+        <button type="submit">Generate Report</button>
+        <a href="/">Clear Report</a>
+    </form>
+
+    <div class="report-results">
+        <div>
+            <p>Total Download</p>
+            <h2>{{ report_download|floatformat:2 }} MB</h2>
+        </div>
+
+        <div>
+            <p>Total Upload</p>
+            <h2>{{ report_upload|floatformat:2 }} MB</h2>
+        </div>
+
+        <div>
+            <p>Total Usage</p>
+            <h2>{{ report_total|floatformat:2 }} MB</h2>
+        </div>
+    </div>
+</section>
+
+            <section class="card">
+                <h3>Bandwidth Usage</h3>
+                <p>Network bandwidth statistics will appear here.</p>
+            </section>
+
+            <section class="card">
+                <h3>Network Policies</h3>
+                <p>QoS rules and blocked domains will appear here.</p>
+            </section>
+
+            <section class="card">
+                <h3>Reports</h3>
+                <p>Network usage reports will appear here.</p>
+            </section>
+        </div>
+    </main>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const chartCanvas = document.getElementById("bandwidthChart");
+
+    new Chart(chartCanvas, {
+        type: "bar",
+        data: {
+            labels: ["Download", "Upload"],
+            datasets: [{
+                label: "Usage (MB)",
+                data: [
+                    Number("{{ total_download }}"),
+                    Number("{{ total_upload }}")
+                ],
+                backgroundColor: ["#2563eb", "#0d9488"],
+                borderRadius: 6
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: "Megabytes (MB)"
+                    }
+                }
+            }
+        }
+    });
+</script>
+</html>
