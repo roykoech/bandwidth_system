@@ -1,3 +1,6 @@
+import csv
+from django.http import HttpResponse
+
 from django.shortcuts import render
 from django.db.models import Sum
 from .models import Device, BandwidthUsage
@@ -70,3 +73,47 @@ def home(request):
     }
 
     return render(request, "dashboard/home.html", context)
+
+
+def export_bandwidth_report(request):
+    start_date = request.GET.get("start_date", "")
+    end_date = request.GET.get("end_date", "")
+
+    records = BandwidthUsage.objects.select_related("device").all()
+
+    if start_date:
+        records = records.filter(recorded_at__date__gte=start_date)
+
+    if end_date:
+        records = records.filter(recorded_at__date__lte=end_date)
+
+    response = HttpResponse(content_type="text/csv")
+    response["Content-Disposition"] = (
+        'attachment; filename="bandwidth_report.csv"'
+    )
+
+    writer = csv.writer(response)
+
+    writer.writerow([
+        "Device Name",
+        "IP Address",
+        "Department",
+        "Download (MB)",
+        "Upload (MB)",
+        "Total Usage (MB)",
+        "Recorded At",
+    ])
+
+    for record in records:
+        writer.writerow([
+            record.device.device_name,
+            record.device.ip_address,
+            record.device.department,
+            record.download_mb,
+            record.upload_mb,
+            record.download_mb + record.upload_mb,
+            record.recorded_at.strftime("%Y-%m-%d %H:%M:%S"),
+        ])
+
+    return response
+
