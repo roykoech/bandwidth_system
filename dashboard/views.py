@@ -1,11 +1,28 @@
+from .forms import DeviceForm
 import csv
 from django.http import HttpResponse
+from django.contrib import messages
+from django.shortcuts import get_object_or_404
 
 from django.shortcuts import render
 from django.db.models import Sum
 from .models import Device, BandwidthUsage
 
 def home(request):
+
+    device_form = DeviceForm()
+
+    if request.method == "POST":
+        device_form = DeviceForm(request.POST)
+
+        if device_form.is_valid():
+            device_form.save()
+            messages.success(
+                request,
+                "Device registered successfully!"
+            )
+            from django.shortcuts import redirect
+            return redirect("home")
     
     start_date = request.GET.get("start_date", "")
     end_date = request.GET.get("end_date", "")
@@ -55,6 +72,7 @@ def home(request):
 
     context = {
         "devices": devices,
+        "device_form": device_form,
         "departments": departments,
         "selected_department": department,
         "selected_status": status,
@@ -73,7 +91,6 @@ def home(request):
     }
 
     return render(request, "dashboard/home.html", context)
-
 
 def export_bandwidth_report(request):
     start_date = request.GET.get("start_date", "")
@@ -116,4 +133,29 @@ def export_bandwidth_report(request):
         ])
 
     return response
+
+def edit_device(request, device_id):
+    device = get_object_or_404(Device, id=device_id)
+    device_form = DeviceForm(instance=device)
+
+    if request.method == "POST":
+        device_form = DeviceForm(request.POST, instance=device)
+
+        if device_form.is_valid():
+            device_form.save()
+            messages.success(
+                request,
+                "Device updated successfully!"
+            )
+            from django.shortcuts import redirect
+            return redirect("home")
+
+    return render(
+        request,
+        "dashboard/edit_device.html",
+        {
+            "device_form": device_form,
+            "device": device,
+        },
+    )
 

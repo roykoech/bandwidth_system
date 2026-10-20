@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Device | Bandwidth Management System</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'dashboard/style.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Bandwidth Management System</h1>
+        <p>Update registered network device details</p>
+    </header>
+
+    <main>
+        <section class="device-registration-card">
+            <h2>Edit {{ device.device_name }}</h2>
+
+            <form method="post">
+                {% csrf_token %}
+                {{ device_form.as_p }}
+
+                <button type="submit" class="register-button">
+                    Save Changes
+                </button>
+
+                <a href="{% url 'home' %}" class="export-button">
+                    Cancel
+                </a>
+            </form>
+        </section>
+    </main>
+</body>
+</html>

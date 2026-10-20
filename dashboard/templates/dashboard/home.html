@@ -55,6 +55,28 @@
 
         <div class="dashboard-grid">
             
+{% if messages %}
+    {% for message in messages %}
+        <div class="success-message">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+
+<section class="device-registration-card">
+    <h2>Register a New Device</h2>
+
+    <form method="post">
+        {% csrf_token %}
+
+        {{ device_form.as_p }}
+
+        <button type="submit" class="register-button">
+            Register Device
+        </button>
+    </form>
+</section>
+
 <section class="card device-table-card">
     <h3>Registered Network Devices</h3>
     
@@ -99,6 +121,7 @@
                     <th>IP Address</th>
                     <th>Department</th>
                     <th>Status</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
 
@@ -114,6 +137,11 @@
                         {% else %}
                             <span class="status disconnected">Disconnected</span>
                         {% endif %}
+                    </td>
+                    <td>
+                     <a href="{% url 'edit_device' device.id %}" class="export-button">
+                       Edit
+                     </a>
                     </td>
                 </tr>
                 {% empty %}
@@ -188,6 +216,10 @@
         <button type="submit">Generate Report</button>
         <a href="/">Clear Report</a>
     </form>
+    
+<a href="{% url 'export_bandwidth_report' %}?start_date={{ start_date }}&end_date={{ end_date }}" class="export-button">
+    Download CSV
+</a>
 
     <div class="report-results">
         <div>
