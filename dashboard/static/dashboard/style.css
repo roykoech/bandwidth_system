@@ -270,3 +270,75 @@ h2 {
         grid-template-columns: 1fr;
     }
 }
+
+.export-button {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 10px 18px;
+    background-color: #198754;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.export-button:hover {
+    background-color: #146c43;
+}
+
+.device-registration-card {
+    background: white;
+    padding: 25px;
+    margin: 25px 0;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.device-registration-card h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.device-registration-card form p {
+    margin-bottom: 15px;
+}
+
+.device-registration-card input[type="text"],
+.device-registration-card input[type="checkbox"] {
+    margin-top: 6px;
+}
+
+.device-registration-card input[type="text"] {
+    display: block;
+    width: 100%;
+    max-width: 450px;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+.register-button {
+    background-color: #0d6efd;
+    color: white;
+    border: none;
+    padding: 11px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.register-button:hover {
+    background-color: #0b5ed7;
+}
+
+.success-message {
+    background-color: #d1e7dd;
+    color: #0f5132;
+    border: 1px solid #badbcc;
+    padding: 14px 18px;
+    margin: 15px 0;
+    border-radius: 8px;
+    font-weight: 600;
+}
