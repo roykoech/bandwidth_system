@@ -3,7 +3,7 @@ import csv
 from django.http import HttpResponse
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
-
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.db.models import Sum
 from .models import Device, BandwidthUsage
@@ -13,6 +13,9 @@ def home(request):
     device_form = DeviceForm()
 
     if request.method == "POST":
+        if not request.user.is_authenticated:
+         from django.contrib.auth.views import redirect_to_login
+        return redirect_to_login(request.get_full_path())
         device_form = DeviceForm(request.POST)
 
         if device_form.is_valid():
@@ -133,7 +136,7 @@ def export_bandwidth_report(request):
         ])
 
     return response
-
+@login_required
 def edit_device(request, device_id):
     device = get_object_or_404(Device, id=device_id)
     device_form = DeviceForm(instance=device)
