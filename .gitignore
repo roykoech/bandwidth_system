@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Django database and backups
+db.sqlite3
+db.sqlite3-journal
+*_backup*.sqlite3
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Deployment static files
+staticfiles/
+
+# Editor and operating system files
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Local duplicate project folder
+bandwidth_system - Copy/
