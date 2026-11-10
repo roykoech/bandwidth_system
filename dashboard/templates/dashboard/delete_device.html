@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Device | Bandwidth Management System</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'dashboard/style.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Bandwidth Management System</h1>
+        <p>Confirm device deletion</p>
+    </header>
+
+    <main>
+        <section class="device-registration-card">
+            <h2>Confirm Device Deletion</h2>
+
+            <p>
+                Are you sure you want to delete
+                <strong>{{ device.device_name }}</strong>?
+            </p>
+
+            <p>
+                Historical bandwidth records will be preserved,
+                but this device will be removed.
+            </p>
+
+            <form method="post">
+                {% csrf_token %}
+
+                <button type="submit" class="delete-button">
+                    Yes, Delete Device
+                </button>
+
+                <a href="{% url 'home' %}" class="export-button">
+                    Cancel
+                </a>
+            </form>
+        </section>
+    </main>
+</body>
+</html>

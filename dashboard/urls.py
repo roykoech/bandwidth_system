@@ -15,11 +15,21 @@ urlpatterns = [
         name="edit_device",
     ),
     path(
-    "login/",
-    auth_views.LoginView.as_view(
+    "delete-device/<int:device_id>/",
+    views.delete_device,
+    name="delete_device",
+    ),
+    path(
+       "login/",
+        auth_views.LoginView.as_view(
         template_name="dashboard/login.html"
     ),
     name="login",
-),
+    ),
+    path(
+      "logout/",
+       auth_views.LogoutView.as_view(),
+       name="logout",
+    ),
 ]
 

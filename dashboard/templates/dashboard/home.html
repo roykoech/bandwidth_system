@@ -1,6 +1,14 @@
-
 <!DOCTYPE html>
 {% load static %}
+{% if user.is_authenticated %}
+    <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="logout-button">
+            Log Out
+        </button>
+    </form>
+{% endif %}
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -142,6 +150,9 @@
                      <a href="{% url 'edit_device' device.id %}" class="export-button">
                        Edit
                      </a>
+                    <a href="{% url 'delete_device' device.id %}" class="delete-button">
+                        Delete
+                    </a>
                     </td>
                 </tr>
                 {% empty %}

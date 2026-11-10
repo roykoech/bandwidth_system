@@ -337,8 +337,38 @@ h2 {
     background-color: #d1e7dd;
     color: #0f5132;
     border: 1px solid #badbcc;
-    padding: 14px 18px;
-    margin: 15px 0;
-    border-radius: 8px;
-    font-weight: 600;
+    padding: 12px 16px;
+    margin: 12px 0;
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+.logout-button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.logout-button:hover {
+    background-color: #bb2d3b;
+}
+
+.delete-button {
+    display: inline-block;
+    background-color: #dc3545;
+    color: white;
+    text-decoration: none;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.delete-button:hover {
+    background-color: #bb2d3b;
 }

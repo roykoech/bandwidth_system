@@ -2,11 +2,12 @@ from .forms import DeviceForm
 import csv
 from django.http import HttpResponse
 from django.contrib import messages
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.db.models import Sum
 from .models import Device, BandwidthUsage
+from django.views.decorators.http import require_POST
 
 def home(request):
 
@@ -15,9 +16,10 @@ def home(request):
     if request.method == "POST":
         if not request.user.is_authenticated:
          from django.contrib.auth.views import redirect_to_login
-        return redirect_to_login(request.get_full_path())
+         return redirect_to_login(request.get_full_path())
+        
         device_form = DeviceForm(request.POST)
-
+        
         if device_form.is_valid():
             device_form.save()
             messages.success(
@@ -92,9 +94,9 @@ def home(request):
         "report_upload": report_upload,
         "report_total": report_download + report_upload,
     }
-
     return render(request, "dashboard/home.html", context)
 
+@login_required
 def export_bandwidth_report(request):
     start_date = request.GET.get("start_date", "")
     end_date = request.GET.get("end_date", "")
@@ -134,8 +136,8 @@ def export_bandwidth_report(request):
             record.download_mb + record.upload_mb,
             record.recorded_at.strftime("%Y-%m-%d %H:%M:%S"),
         ])
-
     return response
+
 @login_required
 def edit_device(request, device_id):
     device = get_object_or_404(Device, id=device_id)
@@ -161,4 +163,25 @@ def edit_device(request, device_id):
             "device": device,
         },
     )
+
+@login_required
+def delete_device(request, device_id):
+    device = get_object_or_404(Device, id=device_id)
+
+    if request.method == "POST":
+        device.delete()
+
+        messages.success(
+            request,
+            "Device deleted successfully. Historical bandwidth records have been preserved."
+        )
+
+        return redirect("home")
+
+    return render(
+        request,
+        "dashboard/delete_device.html",
+        {"device": device},
+    )
+
 
