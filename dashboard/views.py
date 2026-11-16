@@ -9,6 +9,7 @@ from django.db.models import Sum
 from .models import Device, BandwidthUsage
 from django.views.decorators.http import require_POST
 
+@login_required
 def home(request):
 
     device_form = DeviceForm()

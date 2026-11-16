@@ -1,13 +1,5 @@
 <!DOCTYPE html>
 {% load static %}
-{% if user.is_authenticated %}
-    <form method="post" action="{% url 'logout' %}">
-        {% csrf_token %}
-        <button type="submit" class="logout-button">
-            Log Out
-        </button>
-    </form>
-{% endif %}
 
 <html lang="en">
 <head>
@@ -16,11 +8,44 @@
     <title>Bandwidth Management System</title>
     <link rel="stylesheet" href="{% static 'dashboard/style.css' %}">
 </head>
+
 <body>
-    <header>
-        <h1>Bandwidth Management System</h1>
-        <p>Workplace Network Monitoring and Management</p>
-    </header>
+    
+<header>
+    <h1>Bandwidth Management System</h1>
+    <p>Workplace Network Monitoring and Management</p>
+
+    <div style="display: flex;
+                justify-content: flex-start;
+                align-items: center;
+                gap: 12px;
+                margin-top: 15px;
+                flex-wrap: wrap;">
+
+        {% if user.is_staff %}
+            <a href="{% url 'admin:index' %}"
+               style="display: inline-block;
+                      background: #2563eb;
+                      color: white;
+                      padding: 10px 22px;
+                      border-radius: 6px;
+                      text-decoration: none;
+                      font-weight: bold;">
+                Admin
+            </a>
+        {% endif %}
+
+        {% if user.is_authenticated %}
+            <form method="post" action="{% url 'logout' %}" style="margin: 0;">
+                {% csrf_token %}
+                <button type="submit" class="logout-button">
+                    Log Out
+                </button>
+            </form>
+        {% endif %}
+
+    </div>
+</header>
 
     <main>
         <h2>Dashboard Overview</h2>

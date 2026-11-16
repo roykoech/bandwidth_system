@@ -1,100 +1,241 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Administrator Login</title>
+    <title>Bandwidth Management System | Login</title>
+
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            background: #f1f5f9;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
             margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background:
+                linear-gradient(90deg,
+                    rgba(3, 12, 30, 0.88),
+                    rgba(3, 18, 40, 0.55)),
+                url("{% static 'dashboard/images/login-bg.png' %}")
+                center / cover no-repeat fixed;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            align-items: center;
+            gap: 65px;
+        }
+
+        .branding h1 {
+            font-size: clamp(32px, 5vw, 52px);
+            line-height: 1.15;
+            margin-bottom: 15px;
+        }
+
+        .branding h1 span {
+            color: #38bdf8;
+        }
+
+        .tagline {
+            color: #bae6fd;
+            font-size: 18px;
+            letter-spacing: 2px;
+            margin-bottom: 25px;
+        }
+
+        .description {
+            color: #dbeafe;
+            line-height: 1.8;
+            max-width: 470px;
+        }
+
+        .features {
+            margin-top: 30px;
+            line-height: 2.2;
+            color: #e0f2fe;
         }
 
         .login-card {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            width: 320px;
-            max-width: calc(100% - 60px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            background: rgba(10, 25, 50, 0.82);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(125, 211, 252, 0.3);
+            border-radius: 18px;
+            padding: 38px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
         }
 
-        h2 {
-            text-align: center;
-            color: #1e293b;
+        .login-card h2 {
+            font-size: 27px;
+            margin-top: 0;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #94a3b8;
+            font-size: 14px;
+            margin-bottom: 30px;
         }
 
         label {
             display: block;
-            margin-top: 15px;
-            margin-bottom: 6px;
+            margin: 18px 0 8px;
+            font-size: 14px;
+            color: #dbeafe;
         }
 
         input {
             width: 100%;
-            box-sizing: border-box;
-            padding: 11px;
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
+            padding: 13px;
+            border: 1px solid #334e68;
+            border-radius: 8px;
+            background: rgba(15, 35, 65, 0.9);
+            color: white;
+            font-size: 15px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #38bdf8;
+            box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.15);
         }
 
         button {
             width: 100%;
-            margin-top: 22px;
-            padding: 12px;
-            background: #2563eb;
+            margin-top: 27px;
+            padding: 14px;
+            background: linear-gradient(90deg, #2563eb, #0891b2);
             color: white;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
             cursor: pointer;
         }
 
         button:hover {
-            background: #1d4ed8;
+            opacity: 0.9;
         }
 
         .error {
-            color: #dc2626;
+            color: #fca5a5;
+            background: rgba(127, 29, 29, 0.25);
+            border: 1px solid rgba(248, 113, 113, 0.3);
+            border-radius: 7px;
+            padding: 10px;
             font-size: 14px;
+        }
+
+        .security {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 12px;
+            margin-top: 23px;
+        }
+
+        @media (max-width: 800px) {
+            .container {
+                grid-template-columns: 1fr;
+                gap: 30px;
+                max-width: 450px;
+            }
+
+            .branding {
+                text-align: center;
+            }
+
+            .description {
+                margin: auto;
+            }
+
+            .features {
+                display: none;
+            }
+
+            .login-card {
+                padding: 28px;
+            }
         }
     </style>
 </head>
+
 <body>
-    <div class="login-card">
-        <h2>Administrator Login</h2>
+    <div class="container">
 
-        {% if form.errors %}
-            <p class="error">Invalid username or password. Please try again.</p>
-        {% endif %}
+        <section class="branding">
+            <h1>Bandwidth <span>Management</span> System</h1>
 
-        <form method="post">
-            {% csrf_token %}
+            <p class="tagline">
+                MONITOR &bull; MANAGE &bull; OPTIMIZE
+            </p>
 
-            <label for="id_username">Username</label>
-            <input
-                type="text"
-                name="username"
-                id="id_username"
-                autocomplete="username"
-                required
-            >
+            <p class="description">
+                A smarter, more connected workplace.
+                Monitor network performance, manage devices
+                and optimize bandwidth usage from one central
+                platform.
+            </p>
 
-            <label for="id_password">Password</label>
-            <input
-                type="password"
-                name="password"
-                id="id_password"
-                autocomplete="current-password"
-                required
-            >
+            <div class="features">
+                <div>✓ Real-time bandwidth monitoring</div>
+                <div>✓ Network device management</div>
+                <div>✓ Usage reports and analytics</div>
+                <div>✓ Secure administrative access</div>
+            </div>
+        </section>
 
-            <button type="submit">Log In</button>
-        </form>
+        <section class="login-card">
+            <h2>Welcome Back</h2>
+
+            <p class="subtitle">
+                Sign in to access your workplace dashboard.
+            </p>
+
+            {% if form.errors %}
+                <p class="error">
+                    Invalid username or password. Please try again.
+                </p>
+            {% endif %}
+
+            <form method="post">
+                {% csrf_token %}
+
+                <label for="id_username">Username</label>
+                <input
+                    type="text"
+                    name="username"
+                    id="id_username"
+                    autocomplete="username"
+                    required
+                >
+
+                <label for="id_password">Password</label>
+                <input
+                    type="password"
+                    name="password"
+                    id="id_password"
+                    autocomplete="current-password"
+                    required
+                >
+
+                <button type="submit">Sign In</button>
+            </form>
+
+            <p class="security">
+                🔒 Authorized Personnel Only
+            </p>
+        </section>
+
     </div>
 </body>
 </html>
